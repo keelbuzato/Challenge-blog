@@ -1,1 +1,57 @@
-// TODO
+.allPage{
+  background-color:#282C34;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.cardPost{
+  display: flex;
+  flex-direction: column;
+  max-width: 700px;
+  background-color:#282C34;
+  margin-left:180px ;
+  
+  time{
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    color:#D7D7D7 ;
+  }
+
+  strong{
+    display: flex;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    line-height: 2rem;
+    color: #D7D7D7;
+  }
+
+  p{
+    color: #D7D7D7;
+    margin-top: 0.5rem;
+    line-height: 1.625rem;
+  }
+
+  span{
+    display: flex;
+    margin-top: 5px;
+      
+  }
+  img{
+    margin: 10px;
+    
+  }
+
+}
+
+.buttonLoadMore{
+font-family: "Inter";
+font-weight: 600;
+font-size: 18px;
+line-height: 21.78px;
+display: flex;
+color: #FF57B2;
+margin-left:180px ;
+margin-top: 80px;
+}
