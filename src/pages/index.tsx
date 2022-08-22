@@ -1,7 +1,9 @@
+import { usePrismicDocumentsByType } from '@prismicio/react'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 
 import Link from 'next/link'
+import { useCallback, useEffect, useState } from 'react'
 import { getPrismicClient } from '../services/prismic'
 import styles from './home.module.scss'
 import Post from './post/[slug]'
@@ -26,13 +28,31 @@ interface HomeProps {
 }
 
 export default function Home({ posts }) {
-    const formatDate = (date) => {
-        return format(new Date(date), 'dd MMM yyyy', { locale: ptBR })
-    }
+    const [publications, setPublications] = useState(posts)
+    const [pagination, setPagination] = useState(1)
+    const [documents, { state, error }] = usePrismicDocumentsByType('posts', {
+        page: pagination,
+        pageSize: 2,
+    })
 
+    const loadMore = useCallback(() => {
+        if (documents?.results && pagination != 1) {
+            setPublications([...publications, ...documents.results])
+        }
+    }, [pagination, documents])
+
+    useEffect(() => {
+        if (state === 'loaded') {
+            loadMore()
+        }
+    }, [documents, state])
+
+    const formatDate = (date) => {
+        return format(new Date(date), 'dd MMMM yyyy', { locale: ptBR })
+    }
     return (
         <main className={styles.allPage}>
-            {posts?.map(({ data, last_publication_date, uid }) => (
+            {publications?.map(({ data, first_publication_date, uid }) => (
                 <Link href={`/post/${uid}`}>
                     <div className={styles.cardPost}>
                         <strong className={styles.title}>{data.title}</strong>
@@ -40,7 +60,7 @@ export default function Home({ posts }) {
                         <span>
                             <time>
                                 <img src="/calendar.svg" alt="calendario" />
-                                {formatDate(last_publication_date)}
+                                {formatDate(first_publication_date)}
                             </time>
                             <img src="/user.svg" alt="usuario" />
                             <p>{data.author}</p>
@@ -48,16 +68,23 @@ export default function Home({ posts }) {
                     </div>
                 </Link>
             ))}
-            <button className={styles.buttonLoadMore}>
+            <button
+                className={styles.buttonLoadMore}
+                onClick={() => setPagination(pagination + 1)}
+                disabled={pagination >= documents?.total_pages}
+            >
                 Carregar mais posts
             </button>
         </main>
     )
 }
 
-export const getStaticProps = async () => {
+export const getStaticProps = async ({ params }) => {
+    console.log(params)
     const prismic = getPrismicClient()
-    const posts = await prismic.getByType('posts')
+    const posts = await prismic.getByType('posts', {
+        pageSize: 2,
+    })
 
     return {
         props: { posts: posts.results },

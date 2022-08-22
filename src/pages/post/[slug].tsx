@@ -3,6 +3,7 @@ import style from '../../pages/post/post.module.scss'
 import { RichText } from 'prismic-dom'
 import { PrismicRichText } from '@prismicio/react'
 import Image from 'next/image'
+import { GetStaticPaths } from 'next'
 interface Post {
     first_publication_date: string | null
     title: string
@@ -23,6 +24,7 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
+    console.log(post)
     return (
         <>
             <div className={style.container}>
@@ -56,7 +58,9 @@ export default function Post({ post }: PostProps) {
                         <h2 className={style.text}>{post.subtitle}</h2>
                         {post.content.map((content) => (
                             <>
-                                <h5>{content.heading}</h5>
+                                <h5 className={style.subtitleContent}>
+                                    {content.heading}
+                                </h5>
                                 <h5>
                                     <PrismicRichText field={content.body} />
                                 </h5>
@@ -69,7 +73,7 @@ export default function Post({ post }: PostProps) {
     )
 }
 
-export const getStaticPaths = () => {
+export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
         fallback: 'blocking',

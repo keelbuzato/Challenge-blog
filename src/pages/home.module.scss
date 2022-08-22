@@ -3,6 +3,7 @@
   max-width: 1120px;
   margin: 0 auto;
   padding: 0 2rem;
+  
 }
 
 .cardPost{
@@ -19,6 +20,17 @@
     color:#D7D7D7 ;
   }
 
+  .title{
+    font-size: 28px;
+    text-align: justify;
+    font-weight: 700;
+    line-height: 33.89px;
+    letter-spacing: -0.5px;   
+    color:#F8F8F8;
+    font-family: 'inter';
+    cursor: pointer;      
+
+  }
   strong{
     display: flex;
     font-size: 1.5rem;
@@ -53,5 +65,16 @@ line-height: 21.78px;
 display: flex;
 color: #FF57B2;
 margin-left:180px ;
-margin-top: 80px;
+margin-top: 50px;
+margin-bottom: 50px;
+border: none;
+cursor: pointer;
+transition: background .25s ease-in-out;
+
+&:disabled{
+  opacity: .4;
+  cursor: default;
+  display: none;
+}
+
 }
